@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peliculas/widgets/widgets.dart';
 
 class DetailsScreen extends StatelessWidget {
   @override
@@ -15,7 +16,15 @@ class DetailsScreen extends StatelessWidget {
         body: CustomScrollView(
       slivers: [
         _CustomAppBar(),
-        _PosterAndTitle(),
+        SliverList(
+            delegate: SliverChildListDelegate([
+          _PosterAndTitle(),
+          _Overview(),
+          _Overview(),
+          _Overview(),
+          _Overview(),
+          CastingCards()
+        ])),
       ],
     ));
   }
@@ -56,6 +65,8 @@ class _CustomAppBar extends StatelessWidget {
 class _PosterAndTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
     return Container(
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -65,7 +76,7 @@ class _PosterAndTitle extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: FadeInImage(
               placeholder: AssetImage('assets/no-image.jpg'),
-              image: AssetImage('assets/no-image.jpg'),
+              image: NetworkImage('https://via.placeholder.com/200x300'),
               height: 150,
             ),
           ),
@@ -73,14 +84,53 @@ class _PosterAndTitle extends StatelessWidget {
             width: 20,
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'movie.title',
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: textTheme.headlineSmall,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+              Text(
+                'movie.originalTitle',
+                style: textTheme.titleMedium,
+                overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(
+                height: 2,
+              ),
+              Row(
+                children: [
+                  Icon(
+                    Icons.star_outline,
+                    size: 15,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    'movies.voteAverage',
+                    style: textTheme.bodySmall,
+                  ),
+                ],
               )
             ],
           )
         ],
+      ),
+    );
+  }
+}
+
+class _Overview extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      child: Text(
+        'Magna mollit tempor tempor aute eiusmod eu anim pariatur enim proident magna do duis sunt. Ullamco id excepteur veniam Lorem commodo adipisicing id.',
+        textAlign: TextAlign.justify,
+        style: Theme.of(context).textTheme.titleSmall,
       ),
     );
   }
